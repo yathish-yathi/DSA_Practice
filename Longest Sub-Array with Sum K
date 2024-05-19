@@ -1,3 +1,4 @@
+//Optimun solution when when negetives are present (tags : prefix sum Map)
 class Solution{
     // Function for finding maximum and value pair
     public static int lenOfLongSubarr (int A[], int N, int K) {
@@ -29,9 +30,40 @@ class Solution{
         return maxLen;
     }
 }
-//=======//
-tags : prefix sum Map
 
+t: O(n^2) S: 0(n)
+//=======//
+Optimum approch when only 0 and positives present in an array (whole numbers)
+
+class Solution{  
+    // Function for finding maximum and value pair
+    public static int lenOfLongSubarr (int A[], int N, int K) {
+        int left=0;
+        int right=0;
+        int sum=0;
+        int len=0;
+        int maxLen=0;
+        while(right<N){
+            
+            sum+=A[right];
+            
+            while(sum>K && left<right){
+                sum-=A[left];
+                left++;
+            }
+            
+            if(sum==K){
+                len=right-left+1;
+                maxLen=Math.max(maxLen, len);
+            }
+            
+            right++;
+        }
+        return maxLen;
+    }
+}
+
+//=============//
 Given an array containing N integers and an integer K., Your task is to find the length of the longest Sub-Array with the sum of the elements equal to the given value K.
 
  
