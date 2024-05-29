@@ -1,0 +1,65 @@
+https://leetcode.com/problems/merge-intervals/
+https://www.youtube.com/watch?v=dzNIPX7HY6A
+
+T O(nlogn), S O(n)
+
+//1. sort the array based on the first value of intervals array
+//2. create a valriable newInterval for comparing copy first/current interval to it.
+//3. since we dont know how many elements will be in result array and we can not create array without size, So create a arrayList if int array
+//4. [start, end],[start, end],... If end if current interval is greater than start if next interval (next interval is started before the current is ended), then there is a overlap i.e. we need to update end of current/newInterval (no need to repudate in arrayList because arraylist having address of newInterval so updating newInterval will auto updated in arrayList as well)
+//Else no overlaping if array , we will update newInterval with current non-overlaping interval , then comparision continues comparing newly updated newInterval's end with start of next interval
+//5. finaly convert List to array and return
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if(intervals.length<=1){
+            return intervals;
+        }
+
+        Arrays.sort(intervals, Comparator.comparingInt(i->i[0]));
+
+        int[] newInterval=intervals[0];
+
+        List<int[]> result=new ArrayList<>();
+
+        result.add(newInterval);
+
+        for(int[] cur : intervals){
+            if(cur[0]<=newInterval[1]){
+                //overlaping
+                //update end time of newInterval (in other words recently added interval of arrayList)
+                //will update if end time newInterval less than cur interval.
+                newInterval[1]=Math.max(newInterval[1], cur[1]);
+            }else{
+                //not overlaping so one range in done current one is new range
+                //we will add cur interval to arrayList and update newinterval
+                newInterval=cur;
+                result.add(newInterval);
+            }
+        }
+        return result.toArray(new int[result.size()][]);
+    }
+}
+
+//=====
+Medium
+
+Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+
+Example 1:
+
+Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].
+Example 2:
+
+Input: intervals = [[1,4],[4,5]]
+Output: [[1,5]]
+Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+ 
+
+Constraints:
+
+1 <= intervals.length <= 104
+intervals[i].length == 2
+0 <= starti <= endi <= 104
