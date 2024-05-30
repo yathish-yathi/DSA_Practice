@@ -1,0 +1,83 @@
+Medium, T O(N^3), S O(N^4) (if sum==target at every step and each time we add 4 elelemts into list, ex could be array with consecutive ascending nums)
+https://leetcode.com/problems/4sum/
+
+//sort array
+//2 loops for i(1st position) and j(2nd position) and two pointer concept left(3rd position), right(last position)
+//if sum=target then add nums , 
+//if sum>target then we need to reduce sum i.e. we need to do right--
+//if sum<target then we need to increase sum i.e. we need to do left++ untill left<right
+//value of element can be 10^9 so adding this more than 2 times will exceed limit of int so we are using long to store sum
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        
+        if(nums == null || nums.length < 4) {
+            return result;
+        }
+        
+        Arrays.sort(nums);
+        
+        int n = nums.length;
+        
+        for(int i = 0; i < n - 3; i++) {
+            if(i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for(int j = i + 1; j < n - 2; j++) {
+                if(j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = n - 1;
+                
+                while(left < right) {
+                    long sum =(long) nums[i] + nums[j] + nums[left] + nums[right];
+                    if(sum == target) {
+                        result.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                        left++;
+                        right--;
+                        while(left < right && nums[left] == nums[left - 1]) {
+                            left++;
+                        }
+                        while(left < right && nums[right] == nums[right + 1]) {
+                            right--;
+                        }
+                    } else if(sum < target) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+}
+
+
+//======
+
+Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
+
+0 <= a, b, c, d < n
+a, b, c, and d are distinct.
+nums[a] + nums[b] + nums[c] + nums[d] == target
+You may return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+Example 2:
+
+Input: nums = [2,2,2,2,2], target = 8
+Output: [[2,2,2,2]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 200
+-109 <= nums[i] <= 109
+-109 <= target <= 109
