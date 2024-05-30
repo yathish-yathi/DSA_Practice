@@ -1,0 +1,71 @@
+Medium
+https://www.geeksforgeeks.org/problems/count-the-subarrays-having-product-less-than-k1708/1
+https://www.youtube.com/watch?v=NbgRSeV_ypU
+
+T O(2N) (inner while loop may cover all elements once in entire run so O(N+N)) , S O(1)
+
+//number of combination between 2 pointer = lenght between them (r-l+1) at each index
+// both left and right pointer start from begining
+//travers in array untill product<K and count (r-l+1) at each point, when product>=K we reduct 
+//prodcut by dividing product starting from begining (left) until product<K
+
+class Solution {
+    
+    public long countSubArrayProductLessThanK(long a[], int n, long k){
+     int l=0;
+     long product=1l;
+     long ans=0;
+     
+     for(int r=0; r<n; r++){
+         product=product*a[r];
+         
+         while(product>=k && r>l){
+             product=(product/a[l]);
+             l++;
+         }
+         
+         //we have below check because if above while loop failed due to left crossing right but 
+         //product is still higher than k due to larger elelemts, in this cases we dont 
+         // count ans 
+         if(product<k){
+             ans=ans+(r-l+1);
+         }
+        }
+        return ans;
+    }
+}
+
+//=======
+Given an array of positive numbers, the task is to find the number of possible contiguous subarrays having product less than a given number k.
+
+Example 1:
+
+Input : 
+n = 4, k = 10
+a[] = {1, 2, 3, 4}
+Output : 
+7
+Explanation:
+The contiguous subarrays are {1}, {2}, {3}, {4} 
+{1, 2}, {1, 2, 3} and {2, 3}, in all these subarrays
+product of elements is less than 10, count of
+such subarray is 7.
+{2,3,4} will not be a valid subarray, because 
+2*3*4=24 which is greater than 10.
+Example 2:
+
+Input:
+n = 7 , k = 100
+a[] = {1, 9, 2, 8, 6, 4, 3}
+Output:
+16
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function countSubArrayProductLessThanK() which takes the array a[], its size n and an integer k as inputs and returns the count of required subarrays.
+
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1<=n<=106
+1<=k<=1015
+1<=a[i]<=105
