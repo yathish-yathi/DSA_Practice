@@ -1,0 +1,89 @@
+https://leetcode.com/problems/find-a-peak-element-ii/description/
+https://www.youtube.com/watch?v=nGGp5XBzC4g
+T O(nlogm), S O(1)
+
+//here we required to find any one peek value
+//1. we find mid of row which is nothing but column
+//2. then int that column(verticle/mid) we find index with maximum element
+//3. now find left and right side values of the index
+//4. if maximum element is greater than left and right value then 
+//maximum element becomes peek.(max element is maximum in that column so no need to check for top and bottom)
+//5. else if left>max then right=mid-1;(ignore right side)
+//6. else if right>max then left=mid+1;(ignore left side)
+class Solution {
+    public int[] findPeakGrid(int[][] mat) {
+        int n=mat.length;
+        int m=mat[0].length;
+        int l=0, r=m-1;
+        
+        while(l<=r){
+            int mid=(l+r)/2;
+            //1. find max element of col(mid)
+            int maxRowIndex=findMax(mat, n, m, mid);
+
+            //find value for comparision
+            int maxValue=mat[maxRowIndex][mid];
+            int left=(mid-1)>=0 ? mat[maxRowIndex][mid-1] : -1;
+            int right=(mid+1)<m ? mat[maxRowIndex][mid+1] : -1;
+            
+            //4.
+            if(left<maxValue && right<maxValue){
+                return new int[]{maxRowIndex, mid};
+            //5.
+            }else if(left>maxValue){
+                r=mid-1;
+            //6.
+            }else{
+                l=mid+1;
+            }
+        }
+        return new int[]{-1,-1};
+    }
+
+    public int findMax(int[][] mat, int n, int m, int mid){
+        int max=-1;
+        int index=-1;
+        for(int i=0; i<n; i++){
+            if(mat[i][mid]>max){
+                max=mat[i][mid];
+                index=i;
+            }
+        }
+        return index;
+    }
+}
+
+//===========
+A peak element in a 2D grid is an element that is strictly greater than all of its adjacent neighbors to the left, right, top, and bottom.
+
+Given a 0-indexed m x n matrix mat where no two adjacent cells are equal, find any peak element mat[i][j] and return the length 2 array [i,j].
+
+You may assume that the entire matrix is surrounded by an outer perimeter with the value -1 in each cell.
+
+You must write an algorithm that runs in O(m log(n)) or O(n log(m)) time.
+
+ 
+
+Example 1:
+
+
+
+Input: mat = [[1,4],[3,2]]
+Output: [0,1]
+Explanation: Both 3 and 4 are peak elements so [1,0] and [0,1] are both acceptable answers.
+Example 2:
+
+
+
+Input: mat = [[10,20,15],[21,30,14],[7,16,32]]
+Output: [1,1]
+Explanation: Both 30 and 32 are peak elements so [1,1] and [2,2] are both acceptable answers.
+ 
+
+Constraints:
+
+m == mat.length
+n == mat[i].length
+1 <= m, n <= 500
+1 <= mat[i][j] <= 105
+No two adjacent cells are equal.
