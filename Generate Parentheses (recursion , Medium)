@@ -1,0 +1,70 @@
+https://leetcode.com/problems/generate-parentheses/description/
+https://www.youtube.com/watch?v=eyCj_u3PoJE
+T O(2^N),  S O(2^N)
+
+
+//we assume 4 conditions to append "(" or ")", here no. of open brackets=n and no. of closed brackets=n, we keep count of them from n to 0
+//base. condition op and cl = 0 (no more brackets left to append) so add to list
+//1. when op==cl (i.e we are starting or all open brackets are compensated with closed brackets, so if we add ")" at this point then string wil become invalid, because be can not nutralised) so we must use "(" for string to be valid
+//2. we can use either "(" or ")" when we are left with more ")" left to nuetralise
+//3. we must use ")" when we have used all "(" 
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        int op=n;
+        int cl=n;
+        String str="";
+        List<String> ans=new ArrayList<>();
+
+        generate(str, op, cl, ans);
+        return ans;
+    }
+
+    public void generate(String str, int op, int cl, List<String> ans){
+        if(op==0 && cl==0){
+            //System.out.println("base op="+op+" cl="+cl);
+            ans.add(str);
+            //System.out.println(ans);
+            return;
+        }
+
+        //1.
+        if(op==cl){
+            //System.out.println("1 op="+op+" cl="+cl);
+            generate(str+"(", (op-1), cl, ans);
+        }
+
+        //2.
+        else if(op<cl && op!=0){
+            //System.out.println("2 op="+op+" cl="+cl);
+            generate(str+"(", (op-1), cl, ans);
+            //System.out.println("2 op="+op+" cl="+cl);
+            generate(str+")", op, (cl-1), ans);
+        }
+
+        //3.
+        else{
+            //System.out.println("3 op="+op+" cl="+cl);
+            generate(str+")", op, (cl-1), ans);
+        }
+    }
+}
+
+//=====
+Generate Parentheses
+Medium
+
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+Example 1:
+
+Input: n = 3
+Output: ["((()))","(()())","(())()","()(())","()()()"]
+Example 2:
+
+Input: n = 1
+Output: ["()"]
+ 
+
+Constraints:
+
+1 <= n <= 8
