@@ -1,0 +1,82 @@
+https://www.geeksforgeeks.org/problems/sort-a-stack/1
+T O(N*N) two recursion call, S O(N) As first recursion stack increases second recurion call is decreases and vise-varsa so at end only N space is required.
+
+
+class GfG {
+    public Stack<Integer> sort(Stack<Integer> s) {
+
+        //=>using while loop
+        // Stack<Integer> s2=new Stack<>();
+        
+        // while(!s.isEmpty()){
+        //     if(s2.isEmpty() || s.peek()>=s2.peek()){
+        //         s2.push(s.pop());
+        //     }else{
+        //         int a=s.pop();
+        //         while(!s2.isEmpty() && s2.peek()>a){
+        //             s.push(s2.pop());
+        //         }
+        //         s2.push(a);
+        //     }
+        // }
+        // return s2;
+        
+        
+        //=> using recursion 
+        if(!s.isEmpty()){
+            
+            //1. pick up an element 
+            int a=s.pop();
+            
+            //2. pick up each time till array is empty
+            sort(s);
+            
+            //3. while returning place pickedup element a in correct place
+            insertAtCorrectPlace(s, a);
+        }
+        return s;
+    }
+    
+    //recursive funtion to place element a in right place in stack
+    public Stack<Integer> insertAtCorrectPlace(Stack<Integer> s, int a){
+            
+            //base condition : if stack is empty or top element in stack is less than element a 
+            //then push a and return
+            if(s.isEmpty() || s.peek()<a){
+                s.push(a);
+                return s;
+            }
+            
+            //keep n removing top element recursivly untill correct place for a is found 
+            //once found push temp back to stack
+            int temp=s.pop();
+            insertAtCorrectPlace(s,a);
+            s.push(temp);
+
+            return s;
+    }
+}
+//==========
+Sort a stack
+Medium
+
+Given a stack, the task is to sort it such that the top of the stack has the greatest element.
+
+Example 1:
+
+Input:
+Stack: 3 2 1
+Output: 3 2 1
+Example 2:
+
+Input:
+Stack: 11 2 32 3 41
+Output: 41 32 11 3 2
+Your Task: 
+You don't have to read input or print anything. Your task is to complete the function sort() which sorts the elements present in the given stack. (The sorted stack is printed by the driver's code by popping the elements of the stack.)
+
+Expected Time Complexity: O(N*N)
+Expected Auxilliary Space: O(N) recursive.
+
+Constraints:
+1<=N<=100
