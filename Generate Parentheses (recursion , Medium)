@@ -8,6 +8,7 @@ T O(2^N),  S O(2^N)
 //1. when op==cl (i.e we are starting or all open brackets are compensated with closed brackets, so if we add ")" at this point then string wil become invalid, because be can not nutralised) so we must use "(" for string to be valid
 //2. we can use either "(" or ")" when we are left with more ")" left to nuetralise
 //3. we must use ")" when we have used all "(" 
+//note : check note in code
 class Solution {
     public List<String> generateParenthesis(int n) {
         int op=n;
@@ -36,7 +37,7 @@ class Solution {
         //2.
         else if(op<cl && op!=0){
             //System.out.println("2 op="+op+" cl="+cl);
-            generate(str+"(", (op-1), cl, ans);
+            generate(str+"(", (op-1), cl, ans); //here it is important to write (op-1) with bracket and not to use op--/--op, else it will change op value for next generate call.
             //System.out.println("2 op="+op+" cl="+cl);
             generate(str+")", op, (cl-1), ans);
         }
