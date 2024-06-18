@@ -1,0 +1,83 @@
+https://www.geeksforgeeks.org/problems/reverse-a-linked-list/1
+T O(N), S O(1) (while doing with recursion we need O(N) space for recursion stack)
+
+//function Template for Java
+
+/* linked list node class:
+
+class Node {
+    int data;
+    Node next;
+    Node(int value) {
+        this.value = value;
+    }
+}
+
+*/
+
+class Solution
+{
+    //Function to reverse a linked list.
+    Node reverseList(Node head)
+    {
+        // code here
+        
+        // Node prev=null;
+        // Node cur=head;
+        // Node next=null;
+        
+        // while(cur!=null){
+        //     next=cur.next;
+        //     cur.next=prev;
+            
+        //     prev=cur;
+        //     cur=next;
+        // }
+        
+        // //head=prev;
+        // return prev;
+        
+        //using recursion
+        return reverse(head, null);
+        
+        
+    }
+    
+    public Node reverse(Node cur, Node prev){
+        
+        if(cur!=null){
+            Node next=cur.next;
+            cur.next=prev;
+            
+            return reverse(next, cur);
+        }
+        return prev;
+    }
+}
+
+//=======
+Reverse a linked list
+Easy
+
+Given head a linked list, the task is to reverse this list.
+
+The following is internal representation of every test case (two inputs).
+n : Size of the linked list
+value[] :  An array of values that represents values of nodes.
+
+Examples:
+
+Input: n = 6, value[] = {1, 2, 3, 4, 5, 6}
+Output: 6 5 4 3 2 1
+Explanation: The given linked list is 1->2->3->4->5->6. After reversing, it becomes 6->5->4->3->2->1.
+Input: n = 5, value[] = {2, 7, 10, 9, 8} 
+Output: 8 9 10 7 2
+Explanation: The given linked list is 2->7->10->9->8. After reversing, it becomes 8->9->10->7->2.
+Input: n = 1, value[] = {10}
+Output: 10
+Explanation: For a single node list, the reverse would be same as original
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1 <= n <= 104
