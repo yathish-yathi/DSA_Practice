@@ -12,6 +12,9 @@ T O(N), S (N)
 //element is higher that top of stack then directly add int stack, else pop
 //stack and append into res ultill we find suitable place (top less precedance than cur)
 //one all string is traversed if anything left in stack add it also into res and return
+
+Note : Infix to Prefix solved similary but start traversing from end and finally before retuning reverse the result 
+
 class Solution {
     // Function to convert an infix expression to a postfix expression.
     public static String infixToPostfix(String exp) {
@@ -64,6 +67,8 @@ class Solution {
     }
 }
 
+
+Note : Infix to Prefix solved similary but start traversing from end and finally before retuning reverse the result 
 //====
 Infix to Postfix
 Given an infix expression in the form of string str. Convert this infix expression to postfix expression.
