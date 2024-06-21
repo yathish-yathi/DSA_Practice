@@ -30,14 +30,12 @@ class Solution {
                 s.push(exp.charAt(i));
             }
             
-            else if(!s.isEmpty() && exp.charAt(i)==')'){
-                while(!s.isEmpty() && s.peek()!='('){
+            else if(exp.charAt(i)==')'){
+                while(s.peek()!='('){
                     res+=s.peek();
                     s.pop();
                 }
-                if(!s.isEmpty()){
                     s.pop();
-                }
             }
             
             else{
