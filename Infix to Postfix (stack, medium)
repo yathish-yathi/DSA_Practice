@@ -1,0 +1,100 @@
+https://www.geeksforgeeks.org/problems/infix-to-postfix-1587115620/1
+https://www.youtube.com/watch?v=mg9yi6YuAVk
+
+T O(N), S (N)
+
+//travers from start 
+//1. if element is alphabet or letter append into result string
+//2. else if its  ( directly add into stack
+//3. else if its ) pop stack and append to res untill we find previously added open bracket 
+//4. else it means its a operator 
+//top of stack must always contain operator with highest precedance , so if current 
+//element is higher that top of stack then directly add int stack, else pop
+//stack and append into res ultill we find suitable place (top less precedance than cur)
+//one all string is traversed if anything left in stack add it also into res and return
+class Solution {
+    // Function to convert an infix expression to a postfix expression.
+    public static String infixToPostfix(String exp) {
+        // Your code here
+        Stack<Character> s=new Stack<>();
+        String res="";
+        
+        for(int i=0; i<exp.length(); i++){
+            
+            if((exp.charAt(i)>='a' && exp.charAt(i)<='z') || (exp.charAt(i)>='A' && exp.charAt(i)<='Z') || (exp.charAt(i)>='0' && exp.charAt(i)<='9')){
+                res=res+exp.charAt(i);
+                //System.out.println(res+"  ");
+            }
+            
+            else if(exp.charAt(i)=='('){
+                s.push(exp.charAt(i));
+            }
+            
+            else if(!s.isEmpty() && exp.charAt(i)==')'){
+                while(!s.isEmpty() && s.peek()!='('){
+                    res+=s.peek();
+                    s.pop();
+                }
+                if(!s.isEmpty()){
+                    s.pop();
+                }
+            }
+            
+            else{
+                while(!s.isEmpty() && prec(s.peek()) >= prec(exp.charAt(i))){
+                    res+=s.peek();
+                    s.pop();
+                }
+                s.push(exp.charAt(i));
+                //System.out.println(s+"  ");
+            }
+        }
+        
+        while(!s.isEmpty()){
+                    res+=s.peek();
+                    s.pop();
+                }
+                
+        return res;
+    }
+    
+    public static int prec(char c){
+        if(c=='^') return 3;
+        else if(c=='*' || c=='/') return 2;
+        else if(c=='+' || c=='-') return 1;
+        else return -1;
+    }
+}
+
+//====
+Infix to Postfix
+Given an infix expression in the form of string str. Convert this infix expression to postfix expression.
+
+Infix expression: The expression of the form a op b. When an operator is in-between every pair of operands.
+Postfix expression: The expression of the form a b op. When an operator is followed for every pair of operands.
+Note: The order of precedence is: ^ greater than * equals to / greater than + equals to -. Ignore the right associativity of ^.
+Example 1:
+
+Input: str = "a+b*(c^d-e)^(f+g*h)-i"
+Output: abcd^e-fgh*+^*+i-
+Explanation:
+After converting the infix expression 
+into postfix expression, the resultant 
+expression will be abcd^e-fgh*+^*+i-
+Example 2:
+
+Input: str = "A*(B+C)/D"
+Output: ABC+*D/
+Explanation:
+After converting the infix expression 
+into postfix expression, the resultant 
+expression will be ABC+*D/
+ 
+Your Task:
+This is a function problem. You only need to complete the function infixToPostfix() that takes a string(Infix Expression) as a parameter and returns a string(postfix expression). The printing is done automatically by the driver code.
+
+Expected Time Complexity: O(|str|).
+Expected Auxiliary Space: O(|str|).
+
+Constraints:
+1 ≤ |str| ≤ 105
