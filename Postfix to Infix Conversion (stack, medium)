@@ -1,0 +1,63 @@
+https://www.geeksforgeeks.org/problems/prefix-to-infix-conversion/1
+refer Prefix, Infix, postFix videos
+https://www.youtube.com/playlist?list=PLzjZaW71kMwRTtDWYVPvkJypUpKWbuT7_
+
+T O(N) , S O(N)
+
+//this from postfix so we start traversing from front
+//here we pick each elemnt as string ch one by one from last
+//pre_exp.substring(i, i+1); is used to get each letter as string here i+1 is ecluded so even if its out of bound no issues
+//if ch is alphabet then add into stack
+//else its operator so need to perform operation b/w top 2 element of stack
+//But in this problem we need to create a string 
+// In postfix first top is num2 and second top is num1 which will be reverse for prefix
+//after generation string push string back to stack
+//One all element is traversed only one element is left in stack which is out answer , pop and return it
+class Solution {
+    static String postToInfix(String exp) {
+        // code here
+        Stack<String> s=new Stack();
+        
+        for(int i=0; i<exp.length(); i++){
+            String ch=exp.substring(i, i+1);
+            if(ch.matches("^[a-zA-Z]$")){
+                s.push(ch);
+            }else{
+
+                String num2=s.pop();
+                String num1=s.pop();
+                
+                String str="("+num1+ch+num2+")";
+                
+                s.push(str);
+            }
+        }
+        return s.pop();
+    }
+}
+
+//==============
+Postfix to Infix Conversion
+You are given a string that represents the postfix form of a valid mathematical expression. Convert it to its infix form.
+
+Example:
+
+Input:
+ab*c+ 
+Output: 
+((a*b)+c)
+Explanation: 
+The above output is its valid infix form.
+Your Task:
+
+Complete the function string postToInfix(string post_exp), which takes a postfix string as input and returns its infix form.
+
+ 
+
+Expected Time Complexity: O(N).
+
+Expected Auxiliary Space: O(N).
+
+Constraints:
+
+3<=post_exp.length()<=104
