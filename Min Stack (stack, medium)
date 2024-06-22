@@ -2,7 +2,8 @@ https://leetcode.com/problems/min-stack/
 //https://www.youtube.com/watch?v=ZvaRHYYI0-4
 //https://www.youtube.com/watch?v=V09NfaGf2ao
 
-
+//while pushing formula to push updated value (2*cur-min) then update mininum
+//while poping use formula to update min (2*min-s.peek())
 //note : carfully note type conversion between int and long
 class MinStack {
 
@@ -23,6 +24,7 @@ class MinStack {
             if(value>=min){
                 s.push(value);
             }else{
+                //first update value with previous min and push, then update min (reverse in case if poping)
                 s.push(2*value-min);
                 min=value;
             }
@@ -36,6 +38,7 @@ class MinStack {
             if(s.peek()>=min){
                 s.pop();
             }else{
+                //first update min with top of stack, then pop the top (reverse in case if push)
                 min=2*min-s.peek();
                 s.pop();
             }
