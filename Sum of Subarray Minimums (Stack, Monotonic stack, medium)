@@ -1,0 +1,100 @@
+https://leetcode.com/problems/sum-of-subarray-minimums/
+https://www.youtube.com/watch?v=5vt98BZq_9A
+
+T O(3N), S O(3N)
+
+// intuition :  we will goto each element and identify till what index 
+//the current index will remain less on both direction (front and behind => range) , we use concept "Next Smaller Element" at both side to understand till what index the cur index will remain smaller
+//then multiply no. of elements at front and no. of elements behind to get number of subrarrays in which cur element is be small
+// then (cur element) * (No. of subarray where cur element is smaller) = sum for cur element 
+//check this for each element and each time add product into sum
+//NOTE 1 : for case [3, 1, 2, 1] above logic will fail because , we 
+//check till what index cur is smaller, at 1st index 1 is smaller in subrarray
+//[3, 1, 2, 1] and [1, 2, 1] and at 3rd index also 1 is smaller in subarray [3, 1, 2, 1] and [1, 2, 1], but both are same subarray so we include value '1' 4times instead of 2time 
+// to avoid this we need to exclude dublicates in front or behind
+//so remove = sign either in next or prev calculation 
+// in this case we excluded in nextSmaller calculation
+//Note 2 : we have used long to avoid overflow of int when product or sum becomes large
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        int[] front=nextSmaller(arr);
+        int[] behind=prevSmaller(arr);
+        int mod=1000000007;
+        long sum=0l;
+
+        for(int i=0; i<arr.length; i++){
+            int prev=i-behind[i];
+            int next=front[i]-i;
+            long prod=(long)((prev*next)%mod);
+            prod=(prod*arr[i])%mod;
+            sum=(long)(sum%mod+prod)%mod;
+        }
+        return (int)sum;
+    }
+
+    public int[] prevSmaller(int[] arr){
+        Stack<Integer> s = new Stack<>();
+        int[] ans = new int[arr.length];
+
+        for(int i=0; i<arr.length; i++){
+
+            while(!s.isEmpty() && arr[s.peek()]>=arr[i]){
+                s.pop();
+            }
+
+            if(s.isEmpty()) ans[i]=-1;
+            else ans[i]=s.peek();
+
+            s.push(i);
+        }
+        System.out.println(Arrays.toString(ans));
+        return ans;
+    }
+
+    public int[] nextSmaller(int[] arr){
+        Stack<Integer> s = new Stack<>();
+        int[] ans = new int[arr.length];
+
+        for(int i=arr.length-1; i>=0; i--){
+
+            while(!s.isEmpty() && arr[s.peek()]>arr[i]){ //note : arr[s.peek()]>arr[i] instead of arr[s.peek()]>=arr[i]
+                s.pop();
+            }
+
+            if(s.isEmpty()) ans[i]=arr.length;
+            else {
+                ans[i]=s.peek();
+                //System.out.print(s.peek()+"  ");
+                //System.out.print(ans[i]+"  ");
+            }
+            s.push(i);
+        } 
+        //System.out.print(s+"  ");
+        System.out.println(Arrays.toString(ans));
+        return ans;
+    }
+}
+
+//====================
+Sum of Subarray Minimums
+Medium
+
+Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
+Example 1:
+
+Input: arr = [3,1,2,4]
+Output: 17
+Explanation: 
+Subarrays are [3], [1], [2], [4], [3,1], [1,2], [2,4], [3,1,2], [1,2,4], [3,1,2,4]. 
+Minimums are 3, 1, 2, 4, 1, 1, 2, 1, 1, 1.
+Sum is 17.
+Example 2:
+
+Input: arr = [11,81,94,43,3]
+Output: 444
+ 
+
+Constraints:
+
+1 <= arr.length <= 3 * 104
+1 <= arr[i] <= 3 * 104
