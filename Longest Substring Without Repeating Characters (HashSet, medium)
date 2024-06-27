@@ -1,0 +1,76 @@
+https://leetcode.com/problems/longest-substring-without-repeating-characters/
+https://www.youtube.com/watch?v=9Kc0eZBGL1U&t=628s
+
+T O(N), S O(N)
+
+//1. we traverse from front and add into HashSet 
+//2. if its new value we add into set and increase length
+//3. when we encounter element which is already present 
+//set that means our subarray contains repeating char => out subString is invalid now 
+//start removing all value from set in the order of thier addition until previously added dublicate of cur is removed, each time reduce length
+//
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set=new HashSet<>();
+        int j=0;
+        int maxLength=0;
+        int length=0;
+
+        for(int i=0; i<s.length(); i++){
+            char cur=s.charAt(i);
+            //adding to end
+            if(!set.contains(cur)){
+                length++;
+                maxLength=Math.max(maxLength, length);
+            }
+            else{//Removing from front
+                length++;//previously added copy of cur is removed from substring and cur is considered in substring now so in else also we should increase length.   
+                char c;
+                do{
+                    c=s.charAt(j);
+                    set.remove(c);
+                    length--;
+                    j++;
+                    //System.out.println(c+" "+cur+" "+length);
+                }while(c!=cur);
+            }
+
+            set.add(cur);
+        }
+        return maxLength;
+    }
+}
+
+//=======
+Longest Substring Without Repeating Characters
+Medium
+
+Given a string s, find the length of the longest 
+substring
+ without repeating characters.
+
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ 
+
+Constraints:
+
+0 <= s.length <= 5 * 104
+s consists of English letters, digits, symbols and spaces.
