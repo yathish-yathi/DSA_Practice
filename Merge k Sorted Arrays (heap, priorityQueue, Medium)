@@ -1,0 +1,77 @@
+https://www.geeksforgeeks.org/problems/merge-k-sorted-arrays/1?page=1
+https://www.youtube.com/watch?v=l8CuET0jlDU
+
+T O(nlogk), S O(k)
+
+//we can simply add all elements int another array and do Arrays.sort OR we can 
+//we can add elements in minheap and poll() but both will have T O(nlogn) 
+//in both cases we are not making use of thing that all k arrays are sorted
+//we use below technic to merge K sorted arrays in T O(nlogk)
+//1. create a Pair to store value and its row and col values and implement Comparable
+//2. add all first elements of all arrays into heap as pair
+//3. then use while loop till heap is empty
+//3a. pop pair and add value int ans arrayList
+//3b. if next element of cur element then add next element as pair 
+//continue.
+class Solution
+{
+    //Function to merge k sorted arrays.
+    public static ArrayList<Integer> mergeKArrays(int[][] arr,int K) 
+    {
+        // Write your code here.
+        PriorityQueue<Pair> minHeap=new PriorityQueue<>();
+        ArrayList<Integer> ans=new ArrayList<>();
+        
+        for(int i=0; i<arr.length; i++){//arr.length or K
+            minHeap.add(new Pair(arr[i][0], i, 0));
+        }
+        
+        while(!minHeap.isEmpty()){
+            Pair cur=minHeap.poll();
+            ans.add(cur.value);
+            
+            if(cur.col+1 <= arr[cur.row].length-1){
+                minHeap.add(new Pair(arr[cur.row][cur.col+1], cur.row, cur.col+1));
+            }
+        }
+        return ans;
+    }
+    
+    static class Pair implements Comparable<Pair>{
+        int value;
+        int row;
+        int col;
+        
+        public Pair(int value, int row, int col){
+            this.value=value;
+            this.row=row;
+            this.col=col;
+        }
+        
+       // @override
+        public int compareTo(Pair p){
+            return this.value-p.value;
+        }
+    }
+}
+
+//======
+Merge k Sorted Arrays
+Difficulty: Medium
+Given k sorted arrays arranged in the form of a matrix of size k * k. The task is to merge them into one sorted array. Return the merged sorted array ( as a pointer to the merged sorted arrays in cpp, as an ArrayList in java, and list in python).
+
+
+Examples :
+
+Input: k = 3, arr[][] = {{1,2,3},{4,5,6},{7,8,9}}
+Output: 1 2 3 4 5 6 7 8 9
+Explanation: Above test case has 3 sorted arrays of size 3, 3, 3 arr[][] = [[1, 2, 3],[4, 5, 6],[7, 8, 9]]. The merged list will be [1, 2, 3, 4, 5, 6, 7, 8, 9].
+Input: k = 4, arr[][]={{1,2,3,4},{2,2,3,4},{5,5,6,6},{7,8,9,9}}
+Output: 1 2 2 2 3 3 4 4 5 5 6 6 7 8 9 9 
+Explanation: Above test case has 4 sorted arrays of size 4, 4, 4, 4 arr[][] = [[1, 2, 2, 2], [3, 3, 4, 4], [5, 5, 6, 6], [7, 8, 9, 9 ]]. The merged list will be [1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 9].
+Expected Time Complexity: O(k2*Log(k))
+Expected Auxiliary Space: O(k2)
+
+Constraints:
+1 <= k <= 100
+
