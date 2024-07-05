@@ -1,0 +1,78 @@
+https://leetcode.com/problems/valid-parenthesis-string/
+https://www.youtube.com/watch?v=cHT6sG_hUZI
+//using 2 stacks O(n), O(n) : https://www.youtube.com/watch?v=KuE_Cn3xhxI
+
+//'('=+1 and ')'=-1  and '*' could be +1, 0, -1
+//here we will use range min and max instead of count
+//when we encounter * it could be +1 0 -1 
+// we get '(' or ')' we will update max and min similar to normal counter
+//when we get * we expand range as min-- , max ++
+//max can not be negetive at any point of time
+//anytime if minimum is 0 and we got * or ) we can not make min as negetive
+//as it will be invalid and as long as max is +ve we have the flexibility(enough to convert previous * as 0 or +1) so for this scenario we consider 
+//range of * as 0 and +1 and by adding 0 to min(0) minimun remains in lower range
+//at end minimum range must me 0 (nutralised) if its >0 it means we have more '(' which could not be compensated even with *
+class Solution {
+    public boolean checkValidString(String s) {
+
+        int min=0, max=0;
+        for(int i=0; i<s.length(); i++){
+            char c=s.charAt(i);
+
+            if(c=='('){
+                min++;
+                max++;
+            }
+            else if(c==')'){
+                min--;
+                max--;
+
+                if(min<0) min=0;
+                
+                if(max<0) return false;
+            }
+            else {
+                min--;
+                max++;
+
+                if(min<0) min=0;
+            }
+        }
+
+        if(min==0) return true;
+        return false;
+    }
+}
+
+//=========
+Valid Parenthesis String
+Medium
+
+Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.
+
+The following rules define a valid string:
+
+Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+Any right parenthesis ')' must have a corresponding left parenthesis '('.
+Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+'*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string "".
+ 
+
+Example 1:
+
+Input: s = "()"
+Output: true
+Example 2:
+
+Input: s = "(*)"
+Output: true
+Example 3:
+
+Input: s = "(*))"
+Output: true
+ 
+
+Constraints:
+
+1 <= s.length <= 100
+s[i] is '(', ')' or '*'.
