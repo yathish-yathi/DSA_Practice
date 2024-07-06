@@ -3,8 +3,9 @@ https://www.youtube.com/watch?v=dzNIPX7HY6A
 
 T O(nlogn), S O(n)
 
-//1. sort the array based on the first value of intervals array
-//2. create a valriable newInterval for comparing copy first/current interval to it.
+
+//1. sort the array based on the first value/start time of intervals array
+//2. create a valriable newInterval for comparing and copy first/current interval to it.
 //3. since we dont know how many elements will be in result array and we can not create array without size, So create a arrayList if int array
 //4. [start, end],[start, end],... If end if current interval is greater than start if next interval (next interval is started before the current is ended), then there is a overlap i.e. we need to update end of current/newInterval (no need to repudate in arrayList because arraylist having address of newInterval so updating newInterval will auto updated in arrayList as well)
 //Else no overlaping if array , we will update newInterval with current non-overlaping interval , then comparision continues comparing newly updated newInterval's end with start of next interval
@@ -25,14 +26,15 @@ class Solution {
         result.add(newInterval);
 
         for(int[] cur : intervals){
+            //overlaping
             if(cur[0]<=newInterval[1]){
-                //overlaping
                 //update end time of newInterval (in other words recently added interval of arrayList)
                 //will update if end time newInterval less than cur interval.
                 newInterval[1]=Math.max(newInterval[1], cur[1]);
-            }else{
-                //not overlaping so one range in done current one is new range
-                //we will add cur interval to arrayList and update newinterval
+            }
+            //not overlaping
+            else{ 
+                //we will add cur interval to result and make it as newinterval(previous/recently added) of result  to use in next interation.
                 newInterval=cur;
                 result.add(newInterval);
             }
