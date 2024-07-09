@@ -1,0 +1,84 @@
+https://www.geeksforgeeks.org/problems/check-for-balanced-tree/1
+https://www.youtube.com/watch?v=Yt50Jfbd8Po&list=PLkjdNRgDmcc0Pom5erUBU4ZayeU9AyRRu&index=15
+
+T O(N), S O(N) N=height
+
+/* A binary tree node class
+class Node
+{
+	int data;
+	Node left,right;
+	
+	Node(int d)
+	{
+		data = d;
+		left = right = null;		
+	}
+} */
+
+
+//to check condition of binary try we need int but we need to return boolean
+//So here we assume height -1 as false
+// modifed the code - find height of tree
+class Tree
+{
+    
+    //Function to check whether a binary tree is balanced or not.
+    boolean isBalanced(Node root)
+    {
+	// Your code here
+	int h=findHeight(root);
+	
+	if(h==-1) return false;
+	
+	return true;
+    }
+    
+    public int findHeight(Node node){
+        
+        if(node==null){
+            return 0;
+        }
+        
+        int left_height = findHeight(node.left);
+        int right_height = findHeight(node.right);
+        
+        //if we have already found that its not balanced then forward same
+        if(left_height==-1 || right_height==-1) return -1;
+        
+        //checking condition of balanced binary tree
+        if(Math.abs(left_height-right_height)>1) return -1;
+        
+        return Math.max(left_height, right_height) + 1;
+    }
+}
+
+//====
+Balanced Tree Check
+Difficulty: Easy
+Given a binary tree, find if it is height balanced or not.  A tree is height balanced if difference between heights of left and right subtrees is not more than one for all nodes of tree. 
+
+Examples:
+
+Input:
+      1
+    /
+   2
+    \
+     3 
+Output: 0
+Explanation: The max difference in height of left subtree and right subtree is 2, which is greater than 1. Hence unbalanced
+Input:
+       10
+     /   \
+    20   30 
+  /   \
+ 40   60
+Output: 1
+Explanation: The max difference in height of left subtree and right subtree is 1. Hence balanced. 
+Constraints:
+1 <= Number of nodes <= 105
+1 <= Data of a node <= 109
+
+Expected time complexity: O(N)
+Expected auxiliary space: O(h) , where h = height of tree
