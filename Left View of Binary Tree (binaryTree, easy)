@@ -1,0 +1,82 @@
+https://www.geeksforgeeks.org/problems/left-view-of-binary-tree/1
+https://www.youtube.com/watch?v=KV4mRzTjlAk
+
+T O(n), S O(level)
+
+//here for left view we will check goto left ndde first first then right node
+//so at any level fisrt node added at that level will be node of left view
+// we can also use map
+
+/* A Binary Tree node
+class Node
+{
+    int data;
+    Node left, right;
+
+    Node(int item)
+    {
+        data = item;
+        left = right = null;
+    }
+}*/
+class Tree
+{
+    //Function to return list containing elements of left view of binary tree.
+    ArrayList<Integer> leftView(Node root)
+    {
+      // Your code here
+      ArrayList<Integer> ans=new ArrayList<>();
+      
+      leftViewUtil(root, 0, ans);
+      
+      return ans;
+    }
+    
+    public void leftViewUtil(Node root, int level, ArrayList<Integer> ans){
+        
+        if(root==null) return;
+        
+        if(ans.size()==level){
+            ans.add(root.data);
+        }
+        
+        leftViewUtil(root.left, level+1, ans);
+        leftViewUtil(root.right, level+1, ans);
+        
+    }
+}
+
+//=============
+Left View of Binary Tree
+Difficulty: Easy
+Given a Binary Tree, return Left view of it. Left view of a Binary Tree is set of nodes visible when tree is visited from Left side. The task is to complete the function leftView(), which accepts root of the tree as argument. If no left view is possible, return an empty tree.
+
+Left view of following tree is 1 2 4 8.
+
+          1
+       /     \
+     2        3
+   /     \    /    \
+  4     5   6    7
+   \
+     8   
+
+Example 1:
+
+Input:
+   1
+ /  \
+3    2
+Output: 1 3
+
+Example 2:
+
+Input:
+
+Output: 10 20 40
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(N).
+
+Constraints:
+0 <= Number of nodes <= 100
+0 <= Data of a node <= 1000
