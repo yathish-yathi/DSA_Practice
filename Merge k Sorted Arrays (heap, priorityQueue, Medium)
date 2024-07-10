@@ -13,6 +13,8 @@ T O(nlogk), S O(k)
 //3a. pop pair and add value int ans arrayList
 //3b. if next element of cur element then add next element as pair 
 //continue.
+//this solution works in nlogk because at a time only k element will be in heap,
+//thus reduces the heapify time to logk from logN
 class Solution
 {
     //Function to merge k sorted arrays.
