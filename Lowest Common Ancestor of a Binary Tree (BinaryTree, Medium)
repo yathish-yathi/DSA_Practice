@@ -1,0 +1,90 @@
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
+
+//In DFS the point where we meet after finding p and q , is the ancestor
+//1a. If root==null return null
+//1b. for case when both p and q are present at same height (test case-2)
+//here first we find 5, which could be either p or q, Note that there is no point in 
+//traversing down and checking childres of 5 ,even if 4 is present under it, but still 5 will be ancestor of 4. so here we are simply return from 5 and traverse right of 3 to see if 4 exits on that brach, if not exits then its sure that 4 lies somewhere below 5. 
+//eventually 5 is returned as ancestor
+//2. if both left and right are doesn't contain p and q then this is not a parent so return null. (we can remove this condition, in condition 3 when both are null return right will return null as right will also be null)
+//3. if either left or right side (not both) if we have found value then cur is not ancestor return value from whichever side we got
+//4. if we have reached till this point that means both left side and right side we found
+//p and q so cur is the ancestor, return root/root
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        return lowestCommonAncestorUtil(root, p, q);
+    }
+
+    public TreeNode lowestCommonAncestorUtil(TreeNode root, TreeNode p, TreeNode q){
+
+        //1.
+        if(root==null || root==p || root==q){
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestorUtil(root.left, p, q);
+        TreeNode right = lowestCommonAncestorUtil(root.right, p, q);
+
+        //2. 
+        if(left==null && right==null){
+            return null;
+        }
+
+        //3.
+        if(left==null){
+            return right;
+        }
+        if(right==null){
+            return left;
+        }
+
+        //4.
+        return root;
+        
+    }
+}
+
+//===========
+Lowest Common Ancestor of a Binary Tree
+Medium
+
+Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+
+According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+
+
+Example 1:
+
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+Output: 3
+Explanation: The LCA of nodes 5 and 1 is 3.
+Example 2:
+
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+Output: 5
+Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself according to the LCA definition.
+Example 3:
+
+Input: root = [1,2], p = 1, q = 2
+Output: 1
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [2, 105].
+-109 <= Node.val <= 109
+All Node.val are unique.
+p != q
+p and q will exist in the tree.
