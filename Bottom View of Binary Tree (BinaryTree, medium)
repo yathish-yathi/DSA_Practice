@@ -1,6 +1,6 @@
 https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1
 
-T O(n), S O(height of binary tree)
+T O(nlogn) adding and fecting data from tree map will take O(logN) , S O(n) n is the size of map in worst case where all horizontal distance is unique
 
 // same as "Top View of Binary Tree" problem , except we do not mention condition if(!tMap.containsKey(cur_hd))
 // instead we keep on updating map as we traverse to bottom
