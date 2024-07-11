@@ -1,11 +1,14 @@
 https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1
+
+T O(nlogn) adding and fecting data from tree map will take O(logN) , S O(n) n is the size of map in worst case where all horizontal distance is unique
+
 //BFS is used to traverse nodes
 //Do not use DFS because it will work for left side but may fail for right side because
 //DFS will traverse inner nodes first and traverse right most node at last, so 
 //inner node added to map first and right most node are not added due to condition
 //!tMap.containsKey(cur_hd)
 //Note : we have used TreeMap because it will store key-value in ascending order of Key by default, HashMap will not gaurenty any kind of order
-
+//TreeMap internally uses BST(Binary Search Tree, for any node left side smaller and right side greater values structure) to store the KEY.
 
 /*
 class Node{
