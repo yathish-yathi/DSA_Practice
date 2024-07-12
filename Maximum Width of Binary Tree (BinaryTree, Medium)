@@ -1,0 +1,120 @@
+https://leetcode.com/problems/maximum-width-of-binary-tree/description/
+https://www.youtube.com/watch?v=ZbybYvcVLks
+
+T O(N) , S (Max_width) 
+
+//Intuition here is if we able to mark index to first and last nodes at a particular level
+//then we can find width of that level by subtracting last by first index + 1.
+//i. we mark index for every node using concept => if root is i then left and right of that
+//index is (2i+1) and (2i+2)
+//ii. but as we go down in level (2i+1) and (2i+2) becomes too large and overflow int even for long long
+//iii. since we only require first and last index at any particular lever to find width, we will re-index 
+//from 0 again at every level so that even in worst case we wont cross int limit (qns : It is guaranteed that the answer will in the range of a 32-bit signed integer.)
+// 1. define pair to hold node and it's index
+//2. declare Q and add first pair with index 0
+//3. perform BFS (find size (number of nodes at that level) of Q each time and run for loop adding every left and right )
+//4. to start indexing from 0 at every level we identify first index of that level and 
+//subtract other indexes by first index which results in indexing from 0
+//Exm. let indexing of a level be 1, 2, 3, 4, 5......
+// select first index (1) and subtract other index by first index every time we find cur_index
+//so that curindex is updted to 0 based indexing again [1-1, 2-1, 3-1, 4-1,....]
+//=> [0, 1, 2, 3,....]
+//5. for first and last nodes we update first and last variable and by subtracting them we get width of that particular level, finaly we track max width for every level and return it.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    //1.
+    class Pair{
+        TreeNode root;
+        int idx;
+        public Pair(TreeNode root, int idx){
+            this.root=root;
+            this.idx=idx;
+        }
+    }
+
+    public int widthOfBinaryTree(TreeNode root) {
+        
+        int max_width = 0;
+        //2.
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(root, 0));
+
+        //3.
+        while(!q.isEmpty()){
+            int size = q.size();
+            int first_index=q.peek().idx;
+            int first=0, last=0;
+
+            for(int i=0; i<size; i++){
+                Pair cur_p=q.poll();
+                //4.
+                int cur_index=cur_p.idx-first_index;
+                TreeNode cur_root=cur_p.root;
+
+                if(i==0) first=cur_index;
+                if(i==size-1) last=cur_index;
+
+                if(cur_root.left!=null) q.add(new Pair(cur_root.left, 2*cur_index+1));
+                if(cur_root.right!=null) q.add(new Pair(cur_root.right, 2*cur_index+2));
+            }
+            max_width=Math.max(max_width, last-first+1);
+        }
+        return max_width;
+    }
+}
+
+
+//======
+Maximum Width of Binary Tree
+Medium
+
+Given the root of a binary tree, return the maximum width of the given tree.
+
+The maximum width of a tree is the maximum width among all levels.
+
+The width of one level is defined as the length between the end-nodes (the leftmost and rightmost non-null nodes), where the null nodes between the end-nodes that would be present in a complete binary tree extending down to that level are also counted into the length calculation.
+
+It is guaranteed that the answer will in the range of a 32-bit signed integer.
+
+ 
+
+Example 1:
+
+
+Input: root = [1,3,2,5,3,null,9]
+Output: 4
+Explanation: The maximum width exists in the third level with length 4 (5,3,null,9).
+Example 2:
+
+
+Input: root = [1,3,2,5,null,null,9,6,null,7]
+Output: 7
+Explanation: The maximum width exists in the fourth level with length 7 (6,null,null,null,null,null,7).
+Example 3:
+
+
+Input: root = [1,3,2,5]
+Output: 2
+Explanation: The maximum width exists in the second level with length 2 (3,2).
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 3000].
+-100 <= Node.val <= 100
