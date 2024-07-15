@@ -1,0 +1,95 @@
+https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+https://www.youtube.com/watch?v=3OXWEdlIGl4
+
+O T(n) inserting element into list will have O(N) and in worst case time complexity may become O(N^2) in most of practical cases we ignore O(N) and consider O(1) ref Note , S O(N)
+
+//Perform BFS
+//use flag Left2Right to understand current direction
+//if Left2Right true then append values to end of list, list.add(index/cur_index, cur_root.val);
+//if Left2Right false then append values to front of list, list.add(index/0, cur_root.val);
+//add list to ans as NEW, if Left2Right=true them make it false for next loop and vise varsa
+//Note : using LinkedList or ArrayList will have same time complexity O(n) as in ArrayList elements need to be shifted to right and LinkedList it need to traverse from head to tail to find index to insert
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+
+        List<List<Integer>> ans = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
+
+        if(root==null) return ans;
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        q.add(root);
+        boolean Left2Right=true;
+        int index=0;
+
+        while(!q.isEmpty()){
+            int size=q.size();
+            
+            for(int i=0; i<size; i++){
+                //based on flag we are identifying which index to use
+                index=Left2Right ? i : 0;
+                TreeNode cur_root = q.remove();
+                list.add(index, cur_root.val);
+
+                if(cur_root.left!=null){
+                    q.add(cur_root.left);
+                }
+                if(cur_root.right!=null) {
+                    q.add(cur_root.right);
+                }
+            }
+
+            ans.add(new LinkedList<>(list));
+            list.clear();
+            Left2Right = Left2Right ? false : true;
+        }
+        return ans;
+    }
+}
+
+//============
+
+Binary Tree Zigzag Level Order Traversal
+Medium
+
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
+
+ 
+
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+Example 2:
+
+Input: root = [1]
+Output: [[1]]
+Example 3:
+
+Input: root = []
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [0, 2000].
+-100 <= Node.val <= 100
