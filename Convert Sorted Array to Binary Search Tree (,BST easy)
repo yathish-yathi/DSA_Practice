@@ -1,0 +1,77 @@
+https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/description/
+
+T O(n), S O(n)
+
+//similar to binary search
+//we know inorder traversal of BST is sorted i.e. value of parent will be in middle
+//of left and right child nodes
+//1. find the mid and create node 
+//2. create and assign left node from middle value of values at left side cur_mid
+//3. create and assign right node from middle value of values at right side cur_mid
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        
+        return sortedArrayToBST_helper(0, nums.length-1, nums);
+    }
+
+    public TreeNode sortedArrayToBST_helper(int left, int right, int[] nums) {
+        
+        if(left > right) return null;
+
+        int cur_mid = (left+right)/2;
+
+        TreeNode root = new TreeNode(nums[cur_mid]);
+
+        //left
+        root.left= sortedArrayToBST_helper(left, cur_mid-1, nums);
+        //right
+        root.right= sortedArrayToBST_helper(cur_mid+1, right, nums);
+
+        return root;
+    }
+}
+
+//=========
+Convert Sorted Array to Binary Search Tree
+Easy
+Given an integer array nums where the elements are sorted in ascending order, convert it to a 
+height-balanced
+ binary search tree.
+
+ 
+
+Example 1:
+
+
+Input: nums = [-10,-3,0,5,9]
+Output: [0,-3,9,-10,null,5]
+Explanation: [0,-10,5,null,-3,null,9] is also accepted:
+
+Example 2:
+
+
+Input: nums = [1,3]
+Output: [3,1]
+Explanation: [1,null,3] and [3,1] are both height-balanced BSTs.
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+-104 <= nums[i] <= 104
+nums is sorted in a strictly increasing order.
