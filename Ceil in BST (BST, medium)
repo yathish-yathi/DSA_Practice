@@ -1,0 +1,85 @@
+https://www.geeksforgeeks.org/problems/implementing-ceil-in-bst/1
+
+T O(logn), S O(1)
+
+// We use a while loop to travel from top to bottom till we find null and update floor on the way
+//1. initially assign -1 to ceil and we will return this if x itself is the greatest
+//2. run while loop untill null if found in log n traversal
+//3. if we find value equal to x then break and return the same
+//4. if X is less than cur_root then its on left side, since this cur_root is
+//Greater than x if we are traveling left, so it could be our ceil so update ceil value to root
+//5. if X is greater than cur_root then check right node
+class Tree {
+    // Function to return the ceil of given number in BST.
+    int findCeil(Node root, int key) {
+        if (root == null) return -1;
+        // Code here
+        int ceil = -1;
+        
+        while(root!=null){
+            
+            if(key == root.data){
+                ceil=key;
+                break;
+            }
+            
+            if(key < root.data){
+                ceil=root.data;
+                root=root.left;
+            }
+            
+            else{
+                root=root.right;
+            }
+        }
+        
+        return ceil;
+    }
+}
+
+//==========
+Ceil in BST
+Difficulty: Medium
+
+Given a BST and a number X, find Ceil of X.
+Note: Ceil(X) is a number that is either equal to X or is immediately greater than X.
+
+If Ceil could not be found, return -1.
+
+Example 1:
+
+Input:
+      5
+    /   \
+   1     7
+    \
+     2 
+      \
+       3
+X = 3
+Output: 3
+Explanation: We find 3 in BST, so ceil
+of 3 is 3.
+Example 2:
+
+Input:
+     10
+    /  \
+   5    11
+  / \ 
+ 4   7
+      \
+       8
+X = 6
+Output: 7
+Explanation: We find 7 in BST, so ceil
+of 6 is 7.
+Your task:
+You don't need to read input or print anything. Just complete the function findCeil() to implement ceil in BST which returns the ceil of X in the given BST.
+
+Expected Time Complexity: O(Height of the BST)
+Expected Auxiliary Space: O(Height of the BST).
+
+Constraints:
+1 <= Number of nodes <= 105
+1 <= Value of nodes<= 105
