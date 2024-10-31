@@ -2,6 +2,8 @@ https://leetcode.com/problems/remove-outermost-parentheses/
 https://www.youtube.com/watch?v=I0osO1BqiGw
 T (n) , S (1)
 
+//count will become 0 AFTER last outermost ')' so count check is written after count-- and count will be 0 before outermost '(' so count check is written bofore count++.
+
 class Solution {
     public String removeOuterParentheses(String s) {
         
