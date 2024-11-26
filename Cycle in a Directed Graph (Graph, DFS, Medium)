@@ -1,0 +1,63 @@
+https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1
+
+T O(n), S(n)
+
+//=> while recursion if we are encountering a node which is already present in recursion
+//stack that means we are in a cycle then retunr true (node is in stack means its visited so no need to check visited condition)
+//=> else if node is just visited then no need to visited again
+//=> else visit and carry back its result 
+
+class Solution {
+    // Function to detect cycle in a directed graph.
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        boolean[] vis = new boolean[V];
+        boolean[] stack = new boolean[V];
+        
+        for(int i=0; i<V; i++){
+            if(isCyclicUtil(adj, i, vis, stack)) return true;
+        }
+        return false;
+    }
+    
+    public boolean isCyclicUtil(ArrayList<ArrayList<Integer>> adj, int cur,boolean vis[], boolean stack[]){
+        
+        vis[cur]=true;
+        stack[cur]=true;
+        
+        for(int i : adj.get(cur)){
+            if(stack[i]){
+                return true;
+            }else if(vis[i]){
+                continue;
+            }
+            
+            if(isCyclicUtil(adj, i, vis, stack)) return true;
+        }
+        stack[cur]=false;
+        return false;
+    }
+}
+
+=============
+Cycle in a Directed Graph
+Difficulty: Medium
+Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, check whether it contains any cycle or not.
+The graph is represented as an adjacency list, where adj[i] contains a list of vertices that are directly reachable from vertex i. Specifically, adj[i][j] represents an edge from vertex i to vertex j.
+
+Example 1:
+
+Input:
+
+
+
+Output: 1
+Explanation: 3 -> 3 is a cycle
+Example 2:
+Input:
+
+
+Output: 0
+Explanation: no cycle in the graph
+Constraints:
+1 ≤ V, E ≤ 105
