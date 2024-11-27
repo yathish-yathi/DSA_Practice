@@ -1,0 +1,71 @@
+https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1
+
+T O(n) , S O(n) n=depth of recursion stack
+
+class Solution {
+    // Function to detect cycle in an undirected graph.
+    public boolean isCycle(ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        boolean vis[] = new boolean[adj.size()];
+        
+        //this loop is required in case of disconnected graphs
+        for(int i=0; i<adj.size(); i++){
+            if(!vis[i]){
+                if(isCycleUtil(adj, vis, i, -1)) return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean isCycleUtil(ArrayList<ArrayList<Integer>> adj, boolean vis[], int cur, int par) {
+        
+        vis[cur]=true;
+        
+        for(int i : adj.get(cur)){
+            
+            //if node is visited and it is not its parent then there exits a cycle
+            if(vis[i] && i!=par) return true;
+            
+            if(!vis[i]){
+                if(isCycleUtil(adj, vis, i, cur)) return true;
+            }
+        }
+
+        return false;
+    }
+}
+==========
+//=> if node is visited and if it is not its parent then there exist a cyvle.
+
+class Solution {
+    // Function to detect cycle in an undirected graph.
+    public boolean isCycle(ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        boolean vis[] = new boolean[adj.size()];
+        
+        //this loop is required in case of disconnected graphs
+        for(int i=0; i<adj.size(); i++){
+            if(!vis[i]){
+                if(isCycleUtil(adj, vis, i, -1)) return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean isCycleUtil(ArrayList<ArrayList<Integer>> adj, boolean vis[], int cur, int par) {
+        
+        vis[cur]=true;
+        
+        for(int i : adj.get(cur)){
+            
+            //if node is visited and it is not its parent then there exits a cycle
+            if(vis[i] && i!=par) return true;
+            
+            if(!vis[i]){
+                if(isCycleUtil(adj, vis, i, cur)) return true;
+            }
+        }
+
+        return false;
+    }
+}
