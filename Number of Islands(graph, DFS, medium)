@@ -1,0 +1,95 @@
+https://leetcode.com/problems/number-of-islands/description/
+
+T O(mXn), S O(mXn)
+
+//intuition is we we will traverse all 4 connected lands if any, if no other connected
+// lands available to traverse we will return back to calling method and increase Island \
+//count by +1 as we convered one full island, then continue look for new land when found 
+//again visit all its connected islands .. continue the process till all elements are traversed
+//1. create count , find m and n 
+//2. traverse the matrix, when land is found call recursive function and visit all its connected lands in all 4 direction
+//3. in recursive function whenever we visit a land change land mark to '2' (any other char or we can also use separate vis[][] array)
+//4. once all connected nodes are traversed control will come back to calling function, this means we traversed one full island so increase count
+//5. now in main method look for next land which is not yet visited, when found again perform recustive function and traverse all its connected land..
+//6. contine untill all matrix element is checked 
+
+class Solution {
+    public int numIslands(char[][] grid) {
+
+        int count=0;
+        int m=grid[0].length;
+        int n=grid.length;
+
+        for(int i=0;i<grid.length; i++){
+            for(int j=0; j<grid[0].length; j++){
+                if(grid[i][j]=='1'){
+                    numIslandsUtil(grid, i, j, m, n);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public void numIslandsUtil(char[][] grid, int i, int j, int m, int n){
+
+        grid[i][j]='2';
+
+        //left
+        if(j-1>=0 && grid[i][j-1]=='1'){
+            numIslandsUtil(grid, i, j-1, m, n);
+        }
+
+        //up
+        if(i-1>=0 && grid[i-1][j]=='1'){
+            numIslandsUtil(grid, i-1, j, m, n);
+        }
+
+        //right
+        if(j+1<m && grid[i][j+1]=='1'){
+            numIslandsUtil(grid, i, j+1, m, n);
+        }
+
+        //down
+        if(i+1<n && grid[i+1][j]=='1'){
+            numIslandsUtil(grid, i+1, j, m, n);
+        }
+    }
+}
+
+============
+200. Number of Islands
+Medium
+
+Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+ 
+
+Example 1:
+
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+Example 2:
+
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+ 
+
+Constraints:
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 300
+grid[i][j] is '0' or '1'.
