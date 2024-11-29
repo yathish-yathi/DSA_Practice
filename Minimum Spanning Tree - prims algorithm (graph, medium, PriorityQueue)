@@ -1,0 +1,99 @@
+https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1
+
+T O((E+V)logE), S(E+V) E : in PQ , V : in visited
+
+// User function Template for Java
+//List<List<int[]>> adj => this is in the formate of [ [ [],[] ], [ [],[] ], [ [],[] ] ] list[list[array]]
+//1. create pair class and implement comparable or pass comparator into pq on the go.
+//2. create pair with any node and wt=0 and add into pq
+//3. create boolean and sum
+//4. poll from pq as current and if not visited then visit and add its wt to sum
+//5. add all edges of cur as pair into pq
+//continue this untill pq is empty and return sum
+
+class Solution {
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        // Code Here.
+        
+        PriorityQueue<Pair> pq = new PriorityQueue<>((p1, p2) -> p1.wt - p2.wt);
+        
+        pq.add(new Pair(0, 0));
+        
+        boolean vis[] = new boolean[V];
+        int sum=0;
+        
+        while(!pq.isEmpty()){
+            Pair cur = pq.poll();
+            int node = cur.node;
+            int wt = cur.wt;
+            
+            if(!vis[node]){ // this we have written because of cyclic condition one node might got added more times in pq and we dont want to poll compute same node again
+                vis[node]=true;
+                sum+=wt;
+                
+                for(int[] arr : adj.get(node)){
+                    if(!vis[arr[0]]){
+                        pq.add(new Pair(arr[0], arr[1]));
+                    }
+                }
+            }
+        }
+        
+        return sum;
+    }
+}
+
+class Pair {
+    int node;
+    int wt;
+    
+    public Pair(int node, int wt){
+        this.node=node;
+        this.wt=wt;
+    }
+}
+
+=========
+Minimum Spanning Tree
+Difficulty: Medium
+Given a weighted, undirected, and connected graph with V vertices and E edges, your task is to find the sum of the weights of the edges in the Minimum Spanning Tree (MST) of the graph. The graph is represented by an adjacency list, where each element adj[i] is a vector containing vector of integers. Each vector represents an edge, with the first integer denoting the endpoint of the edge and the second integer denoting the weight of the edge.
+
+Example 1:
+
+Input:
+3 3
+0 1 5
+1 2 3
+0 2 1
+
+Output:
+4
+Explanation:
+
+The Spanning Tree resulting in a weight
+of 4 is shown above.
+Example 2:
+
+Input:
+2 1
+0 1 5
+
+Output:
+5
+Explanation:
+Only one Spanning Tree is possible
+which has a weight of 5.
+ 
+
+Your task:
+Since this is a functional problem you don't have to worry about input, you just have to complete the function spanningTree() which takes a number of vertices V and an adjacency list adj as input parameters and returns an integer denoting the sum of weights of the edges of the Minimum Spanning Tree. Here adj[i] contains vectors of size 2, where the first integer in that vector denotes the end of the edge and the second integer denotes the edge weight.
+
+Expected Time Complexity: O(ElogV).
+Expected Auxiliary Space: O(V2).
+ 
+
+Constraints:
+2 ≤ V ≤ 1000
+V-1 ≤ E ≤ (V*(V-1))/2
+1 ≤ w ≤ 1000
+The graph is connected and doesn't contain self-loops & multiple edges.
