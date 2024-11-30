@@ -1,0 +1,62 @@
+https://leetcode.com/problems/climbing-stairs/submissions/1466477831/
+
+T O(n), S O(1)
+
+//1. to climb one step we have one way (way1=1)
+//2. to climb two step we have two way (way2=2)
+//3. to climb 3rd step we can reach 1st then and jump 2 step OR reach 2nd step then jumb 1 step
+//so to reach 3rd step we have (way1+way2) ways
+//NOTE : when we say "to reach 3rd can reach 1st step then and jump 2 step", we are not adding 
+//anything way1+2 because if I am following a way(way=type/possibility not to confuse with step count) and if I add 2 step to it, that doest no make is a different way, its just continuation of same way/path/possibility
+//same goes with "to reach 3rd can reach 2st step then and jump 1 step"
+//thats why there is nothing to be added while way3 = way1 + way2;
+
+class Solution {
+    public int climbStairs(int n) {
+        
+        int way1 = 1;
+        int way2 = 2;
+        int way3 = 0;
+
+        if(n==1) return way1;
+        if(n==2) return way2;
+
+        for(int i=2; i<n; i++){
+            way3 = way1 + way2;
+
+            way1=way2;
+            way2=way3;
+        }
+        return way3;
+    }
+}
+
+//==========
+. Climbing Stairs
+
+You are climbing a staircase. It takes n steps to reach the top.
+
+Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+ 
+
+Example 1:
+
+Input: n = 2
+Output: 2
+Explanation: There are two ways to climb to the top.
+1. 1 step + 1 step
+2. 2 steps
+Example 2:
+
+Input: n = 3
+Output: 3
+Explanation: There are three ways to climb to the top.
+1. 1 step + 1 step + 1 step
+2. 1 step + 2 steps
+3. 2 steps + 1 step
+ 
+
+Constraints:
+
+1 <= n <= 45
