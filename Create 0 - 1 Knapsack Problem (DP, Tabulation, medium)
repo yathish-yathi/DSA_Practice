@@ -1,0 +1,115 @@
+https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1
+
+//Tabulation approch 1 
+
+T O(Items*capacity), S O(Items*capacity)
+
+//we will check max value at every weight and items 
+//1. create DP matrix of  [m+1][n+1] 0 wt and 0 val
+//2. when either we have no item or no capacity (i & w = 0 ) we cant add any item so val = 0
+//3. if cur capacity >= items weight then that item can be included OR Excluded
+// 3a. if included then add its value and max value till previous weight and reduced capacity
+//4. if cur capacity < items weight then that item we can not add that item so Exclude
+//5. return last val
+class Solution {
+    // Function to return max value that can be put in knapsack of capacity.
+    static int knapSack(int capacity, int val[], int wt[]) {
+        // code here
+        int m = val.length;
+        int n = capacity;
+        
+        int dp[][] = new int [m+1][n+1]; // +1 because we have added extra val=0 and wt=0 
+        
+        for(int i=0; i<=m; i++){
+            for(int w=0; w<=n; w++){
+                
+                if(i==0 || w==0) {
+                    dp[i][w]=0;
+                }
+                //Item Can be included cur capacity >= items weight
+                else if( w >= wt[i-1]){
+                    //included
+                    int val1 = val[i-1] + dp[i-1][w - wt[i-1]];
+                    //Excluded
+                    int val2 = dp[i-1][w];
+                    
+                    dp[i][w] = Math.max(val1, val2);
+                }
+                //Item can not be included (Excluded)
+                else{
+                    dp[i][w] = dp[i-1][w];
+                }
+            }
+        }
+        return dp[m][n];
+    }
+}
+
+//Tabulation approch 2 (space optimised)
+
+T O(Items*capacity), S O(capacity)
+
+//In previous code we noticed that we need only previous one row to identify values for current row , so in this tabulation we use only 1D array
+//=> here we need to traverse weight from Right to left because ,
+//in INCLUDED case ,at any point max val needed for reduced weight is store in previous cell 
+//so if we travelse from left the previous cells will be updated with new values which will break logic
+//to avoid this we traverse from right to left so the previous max value for reduced weight can be found in dp(w - wt[itemIndex) cell
+//Note : for EXCLUDED case max value till previous  item it present in curent cell itself , so we have not writtern else { } block here
+
+class Solution {
+    // Function to return max value that can be put in knapsack of capacity.
+    static int knapSack(int capacity, int val[], int wt[]) {
+        // code here
+        int m = val.length;
+        int n = capacity;
+        
+        int dp[] = new int [n+1]; // +1 because we have added 0th capacity wt=0 
+        
+        for(int i=0; i<=m; i++){
+            for(int w=n; w>=0; w--){
+                
+                if(i==0 || w==0) {
+                    dp[w]=0;
+                }
+                //Item Can be included cur capacity >= items weight
+                else if( w >= wt[i-1]){
+                    //included
+                    int val1 = val[i-1] + dp[w - wt[i-1]];
+                    //Excluded
+                    int val2 = dp[w];
+                    
+                    dp[w] = Math.max(val1, val2);
+                }
+            }
+        }
+        return dp[n];
+    }
+}
+
+==========
+0 - 1 Knapsack Problem
+Difficulty: Medium
+
+You are given the weights and values of items, and you need to put these items in a knapsack of capacity capacity to achieve the maximum total value in the knapsack. Each item is available in only one quantity.
+
+In other words, you are given two integer arrays val[] and wt[], which represent the values and weights associated with items, respectively. You are also given an integer capacity, which represents the knapsack capacity. Your task is to find the maximum sum of values of a subset of val[] such that the sum of the weights of the corresponding subset is less than or equal to capacity. You cannot break an item; you must either pick the entire item or leave it (0-1 property).
+
+Examples :
+
+Input: capacity = 4, val[] = [1, 2, 3], wt[] = [4, 5, 1] 
+Output: 3
+Explanation: Choose the last item, which weighs 1 unit and has a value of 3.
+Input: capacity = 3, val[] = [1, 2, 3], wt[] = [4, 5, 6] 
+Output: 0
+Explanation: Every item has a weight exceeding the knapsack's capacity (3).
+Input: capacity = 5, val[] = [10, 40, 30, 50], wt[] = [5, 4, 6, 3] 
+Output: 50
+Explanation: Choose the second item (value 40, weight 4) and the fourth item (value 50, weight 3) for a total weight of 7, which exceeds the capacity. Instead, pick the last item (value 50, weight 3) for a total value of 50.
+Expected Time Complexity: O(n*capacity).
+Expected Auxiliary Space: O(n*capacity)
+
+Constraints:
+2 ≤ val.size() = wt.size() ≤ 103
+1 ≤ capacity ≤ 103
+1 ≤ val[i] ≤ 103
+1 ≤ wt[i] ≤ 103
