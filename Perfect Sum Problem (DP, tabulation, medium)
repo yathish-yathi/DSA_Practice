@@ -1,0 +1,74 @@
+https://www.geeksforgeeks.org/problems/perfect-sum-problem5633/1
+
+T O(m*n), S O(m*n)
+
+//=> Number ways we can have perfect sum = number of ways we can have excluding + including
+//NOTE : here I have written for loop of initial DP update separatly to reduce code complexity when test cases contains 0, better to follow same method 
+
+class Solution {
+    // Function to calculate the number of subsets with a given sum
+    public int perfectSum(int[] nums, int target) {
+        // code here
+        int dp[][] = new int[nums.length+1][target+1];
+        int m = nums.length;
+        int n = target;
+        
+        //
+        for(int i=0; i<n; i++){
+            dp[0][i]=0; // if we have no elements then we can not form any sum
+        }
+        
+        for(int i=0; i<m; i++){
+            dp[i][0]=1; // if we have targer=0, we can always form it with empty  
+        }
+        
+        for(int i=1; i<=m; i++){
+            for(int t=0; t<=n; t++){
+                
+                if(t >= nums[i-1]){ //we can pick only of target is >= picking elements
+                    //include
+                    int ways1 = dp[i-1][t - nums[i-1]];
+                    
+                    //exclude
+                    int ways2 = dp[i-1][t];
+                    
+                    dp[i][t] = ways1 + ways2;
+                    
+                }
+                
+                else {
+                    dp[i][t] = dp[i-1][t];
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+}
+
+===========
+Perfect Sum Problem
+Difficulty: Medium
+
+Given an array arr of non-negative integers and an integer target, the task is to count all subsets of the array whose sum is equal to the given target.
+
+Note: It is guaranteed that the product of the length of arr and target will not exceed 106
+
+Examples:
+
+Input: arr[] = [5, 2, 3, 10, 6, 8], target = 10
+Output: 3
+Explanation: The subsets {5, 2, 3}, {2, 8}, and {10} sum up to the target 10.
+Input: arr[] = [2, 5, 1, 4, 3], target = 10
+Output: 3
+Explanation: The subsets {2, 1, 4, 3}, {5, 1, 4}, and {2, 5, 3} sum up to the target 10.
+Input: arr[] = [5, 7, 8], target = 3
+Output: 0
+Explanation: There are no subsets of the array that sum up to the target 3.
+Input: arr[] = [35, 2, 8, 22], target = 0
+Output: 1
+Explanation: The empty subset is the only subset with a sum of 0.
+Constraints:
+1 ≤ arr.size() ≤ 103
+0 ≤ arr[i] ≤ 103
+0 ≤ target ≤ 103
