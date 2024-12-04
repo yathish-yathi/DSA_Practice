@@ -14,8 +14,16 @@ X - Y = 3
 So, X = 10
 
 So we just need to find how many sbusets we can form using given array elements with target == 10
+
+here, X = (17+3)/2
+To write generally,
+Target = (Sum+d)/2; OR
+Target = (Sum-d)/2; (when equation is written in terms of Y)
+
 which is nothing but "Perfect Sum Problem"
 https://www.geeksforgeeks.org/problems/perfect-sum-problem5633/1
+
+becarful about edge cases like sum+d shuould be even and positive 
 
 //========
 Partitions with Given Difference
