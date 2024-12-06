@@ -86,6 +86,62 @@ class Solution {
     }
 }
 
+
++++++++++++++++++
+using memoisation and recursion
+++++++++++++++++++
+
+//here we will use memoization to improve time complexity so it is important
+//that we write code such that each i & j is a independent problem
+//few things we did to achieve 
+//a. we started from N to 0 (other way also works), so that add answer of subproblem to bigger problem
+//b. we can solve by updating profit+Val[n-1] and return in base case similar to reduction of weight but doing this will not make subproblem a idependent
+
+//other note : we can not use Arrays.fill() or toString() on 2D array
+
+class Solution {
+    // Function to return max value that can be put in knapsack of capacity.
+    static int knapSack(int capacity, int val[], int wt[]) {
+        // code here
+        
+        int dp[][]  = new int[val.length+1][capacity+1]; //[V][W]
+        for(int[] arr : dp){
+           for(int i=0; i<arr.length; i++){
+               arr[i]=-1;
+           }
+        }
+        
+        int n = val.length;
+        
+        return knapSackUtil(val, wt, capacity, n, dp);
+    }
+    
+    static int knapSackUtil(int val[], int wt[], int w, int n, int dp[][]) {
+        // code here
+        if(n==0 || w==0) return 0; // we have written val.length , not val.length-1 because we are checking for completion of all element so
+        
+        if(dp[n][w]!=-1) return dp[n][w];
+        
+        if(w >= wt[n-1]){
+            //here -1 written in val[n-1] or wt[n-1] actully n itself but -1 because of ) indexing of val and wt arrays not to confuse it with n-1 in function which represents till previous elements
+            int ans1 = val[n-1] + knapSackUtil(val, wt, w-wt[n-1], n-1, dp);
+            
+            int ans2 = knapSackUtil(val, wt, w, n-1, dp);
+            
+            dp[n][w] = Math.max(ans1, ans2);
+
+            return dp[n][w];
+            
+        }else{
+            dp[n][w] = knapSackUtil(val, wt, w, n-1, dp);
+
+            return dp[n][w];
+        }
+        
+    }
+}
+
+
 ==========
 0 - 1 Knapsack Problem
 Difficulty: Medium
