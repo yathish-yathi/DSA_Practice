@@ -2,8 +2,14 @@ https://www.geeksforgeeks.org/problems/perfect-sum-problem5633/1
 
 T O(m*n), S O(m*n)
 
-//=> Number ways we can have perfect sum = number of ways we can have excluding + including
-//NOTE : here I have written for loop of initial DP update separatly to reduce code complexity when test cases contains 0, better to follow same method 
+=> Using tabulation 
+
+//=> Number ways we can have perfect sum = number of ways we can have including cur + excluding cur
+//In this question the array elements or target sum could be 0 so we can not initilise 0 index values to 0 or 1 directly, like to 0-1 knap sack problem
+//1. create DP table 
+//2. when we are not having any elements (empty array or row/i=0) we can not form any target except for target=0 so initialise dp[0][0]=1 and dp[0][1 to n]=0,
+// we can not fill 0th col element with '1' here when target/any element is 0 , the 0th col could be any value
+//3. start trversing DP from 1st row and 0th col (because we have not filled 0th col)
 
 class Solution {
     // Function to calculate the number of subsets with a given sum
@@ -13,19 +19,17 @@ class Solution {
         int m = nums.length;
         int n = target;
         
-        //
-        for(int i=0; i<n; i++){
-            dp[0][i]=0; // if we have no elements then we can not form any sum
-        }
-        
-        for(int i=0; i<m; i++){
-            dp[i][0]=1; // if we have targer=0, we can always form it with empty  
-        }
+       //2.
+        for(int i=0; i<=n; i++){
+            if(i==0) dp[0][i]=1;
+            else dp[0][i]=0; 
+            }
+
         
         for(int i=1; i<=m; i++){
             for(int t=0; t<=n; t++){
                 
-                if(t >= nums[i-1]){ //we can pick only of target is >= picking elements
+                if(t >= nums[i-1]){ //we can pick only if target is >= picking elements
                     //include
                     int ways1 = dp[i-1][t - nums[i-1]];
                     
@@ -35,7 +39,6 @@ class Solution {
                     dp[i][t] = ways1 + ways2;
                     
                 }
-                
                 else {
                     dp[i][t] = dp[i-1][t];
                 }
@@ -43,6 +46,113 @@ class Solution {
         }
         
         return dp[m][n];
+    }
+}
+
+=> using recursion - 1
+
+// NOTE : sice we can have 0 as target or element we can not stop traversing when target=0 because target+0 is also 0, so if we stop when target becomes 0 we will miss combinations with 0
+//so continue even after targer becomes 0 till all elements are checked.
+
+class Solution {
+    // Function to calculate the number of subsets with a given sum
+    public int perfectSum(int[] nums, int target) {
+        // code here
+        int dp[][]  = new int[nums.length+1][target+1]; //[V][W]
+        
+        for(int[] ii : dp){
+           Arrays.fill(ii, -1);
+        } 
+        
+        int n = nums.length;
+        
+        return perfectSumUtil(nums, target, n, dp);
+    }
+    
+    static int perfectSumUtil(int nums[], int target, int n, int dp[][]) {
+        // code here
+        //return 1 when we traversed all elements
+        if(target==0 && n==0) return 1;
+        
+        if(n==0) return 0;
+        
+        if(dp[n][target] != -1) return dp[n][target];
+        
+        if(target >= nums[n-1 ]){
+            //here -1 written in val[n-1] or wt[n-1] actully n itself but -1 because of ) indexing of val and wt arrays not to confuse it with n-1 in function which represents till previous elements
+            int ans1 = perfectSumUtil(nums, target-nums[n-1], n-1, dp);
+            
+            int ans2 = perfectSumUtil(nums, target, n-1, dp);
+            
+            dp[n][target] = ans1 + ans2;
+
+            return dp[n][target];
+            
+        }else{
+            dp[n][target] = perfectSumUtil(nums, target, n-1, dp);
+
+            return dp[n][target];
+        }
+    }
+}
+
+=> using recursion - 2
+
+//In this approach we have ignored element 0 while DP traversal here, after finding perfect subsets we have counted number of zeros in given problem and can calculated their combinations
+//with 0s
+//combinations = 2^n , here n=no of zeros
+
+class Solution {
+    // Function to calculate the number of subsets with a given sum
+    public int perfectSum(int[] nums, int target) {
+        // code here
+        int dp[][]  = new int[nums.length+1][target+1]; //[V][W]
+        
+        for(int[] ii : dp){
+           Arrays.fill(ii, -1);
+        } 
+        
+        int n = nums.length;
+        
+        int count=0;
+        for(int i=0; i<n; i++){
+            if(nums[i]==0) count++;
+        }
+        
+        int ans = perfectSumUtil(nums, target, n, dp);
+        
+        // for(int i=0; i<n; i++){
+        //     for(int j=0; j<n; j++){
+        //         System.out.print(dp[i][j]);
+        //     }
+        //     System.out.println();
+        // }
+        
+        return ans * (int) Math.pow(2, count);
+    }
+    
+    static int perfectSumUtil(int nums[], int target, int n, int dp[][]) {
+        // code here
+        if(target == 0) return 1;
+        if(n == 0) return 0; 
+        
+        if(dp[n][target] != -1) return dp[n][target];
+        
+        if(target >= nums[n-1 ] && nums[n-1] != 0){
+            //here -1 written in val[n-1] or wt[n-1] actully n itself but -1 because of ) indexing of val and wt arrays not to confuse it with n-1 in function which represents till previous elements
+            int ans1 = perfectSumUtil(nums, target-nums[n-1], n-1, dp);
+            
+            int ans2 = perfectSumUtil(nums, target, n-1, dp);
+            
+            dp[n][target] = ans1 + ans2;
+
+            return dp[n][target];
+            
+        }else{
+            dp[n][target] = perfectSumUtil(nums, target, n-1, dp);
+
+            return dp[n][target];
+        }
     }
 }
 
