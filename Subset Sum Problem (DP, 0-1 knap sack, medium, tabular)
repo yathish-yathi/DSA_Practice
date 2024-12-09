@@ -3,6 +3,8 @@ https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1
 T O(coins * Target), S O(coins * Target)
 //Logic is same as 0 - 1 knap sack instead of int we use boolean, we can rewrite code to optimise space similar to 0 - 1 knap sack problem
 
+//Tabulation approch 
+
 class Solution {
 
     static Boolean isSubsetSum(int arr[], int target) {
@@ -48,6 +50,52 @@ class Solution {
             }
         }
         return dp[m][n];
+    }
+}
+
+=========
+recursive approach
+
+class Solution {
+
+    static Boolean isSubsetSum(int arr[], int target) {
+        // code here
+        int dp[][]  = new int[arr.length+1][target+1]; //[V][W]
+        
+        for(int[] ii : dp){
+           for(int i=0; i<ii.length; i++){
+               ii[i]=-1;
+           }
+        } 
+        
+        int n = arr.length;
+        
+        
+        return isSubsetSumUtil(arr, target, n, dp) == 1 ? true : false;
+    }
+    
+    static int isSubsetSumUtil(int arr[], int target, int n, int dp[][]) {
+        // code here
+        if(target == 0) return 1;
+        if(n == 0) return 0; 
+        
+        if(dp[n][target] != -1) return dp[n][target];
+        
+        if(target >= arr[n-1]){
+            //here -1 written in val[n-1] or wt[n-1] actully n itself but -1 because of ) indexing of val and wt arrays not to confuse it with n-1 in function which represents till previous elements
+            int ans1 = isSubsetSumUtil(arr, target-arr[n-1], n-1, dp);
+            
+            int ans2 = isSubsetSumUtil(arr, target, n-1, dp);
+            
+            dp[n][target] = (ans1 ==1 || ans2 == 1) ? 1 : 0;
+
+            return dp[n][target];
+            
+        }else{
+            dp[n][target] = isSubsetSumUtil(arr, target, n-1, dp);
+
+            return dp[n][target];
+        }
     }
 }
 
