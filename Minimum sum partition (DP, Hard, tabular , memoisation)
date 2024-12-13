@@ -1,0 +1,103 @@
+https://www.geeksforgeeks.org/problems/minimum-sum-partition3317/1
+
+T O(arr.length * sum/2), S O(arr.length * sum/2) space can be optimised using 1D array
+
+//=> we know that any one single subset will be in range from 0 to sum/2
+//=> we know maximum the s1 and s1 minumum will be their answer
+//=> so here will for DP table between 0 to sum/2 , then we traverse last row of DP
+//from maximun to minimum which sum is possible (true), 
+// true mean that target is posible for one subset, and s2 will be sum-s1
+//finally we will return difference of s1 and s2
+
+class Solution {
+
+    public int minDifference(int arr[]) {
+        // Your code goes here
+        
+        int n = arr.length;
+        int sum = 0;
+        for(int i=0; i<n; i++){
+            sum+=arr[i];
+        }
+
+        //find target
+        int target = sum/2;
+
+        int s1 = subsetSum(arr, target);
+
+        int s2 = sum - s1;
+       // we know tagest will be either sum/2 or less so we can say s1 wll be smaller elements so s2-s1.
+        return s2-s1; 
+    }
+    
+    public int subsetSum(int[] arr, int target){
+        
+         int m = arr.length;
+        int n = target;
+        
+        boolean dp[][] = new boolean[m+1][n+1]; 
+        
+        for(int i=0; i<=m; i++){
+            for(int t=0; t<=n; t++){
+                if(i==0 || t==0){
+                    if(i==0) {
+                        dp[i][t]=false;
+                    }
+                    if(t==0) {
+                        dp[i][t]=true;
+                    }
+                }
+                
+                else if( t >= arr[i-1]){
+                    //included
+                    boolean val1 = dp[i-1][t - arr[i-1]];
+                    //Excluded
+                    boolean val2 = dp[i-1][t];
+                    
+                    dp[i][t] = (val1 || val2);
+                }
+                else{
+                    dp[i][t] = dp[i-1][t];
+                }
+            }
+        }
+        
+        for(int i=target; i>=0; i--){
+            if(dp[m][i]){
+                return i;
+            }
+        }
+        
+        return 0;
+    }
+}
+
+=============
+Minimum sum partition
+Difficulty: Hard
+
+Given an array arr[]  containing non-negative integers, the task is to divide it into two sets set1 and set2 such that the absolute difference between their sums is minimum and find the minimum difference.
+
+Examples:
+
+Input: arr[] = [1, 6, 11, 5]
+Output: 1
+Explanation: 
+Subset1 = {1, 5, 6}, sum of Subset1 = 12 
+Subset2 = {11}, sum of Subset2 = 11 
+Hence, minimum difference is 1.  
+Input: arr[] = [1, 4]
+Output: 3
+Explanation: 
+Subset1 = {1}, sum of Subset1 = 1
+Subset2 = {4}, sum of Subset2 = 4
+Hence, minimum difference is 3.
+Input: arr[] = [1]
+Output: 1
+Explanation: 
+Subset1 = {1}, sum of Subset1 = 1
+Subset2 = {}, sum of Subset2 = 0
+Hence, minimum difference is 1.
+Constraints:
+1 ≤ arr.size()*|sum of array elements| ≤ 105
+1 <= arr[i] <= 105
