@@ -1,0 +1,67 @@
+https://www.geeksforgeeks.org/problems/rod-cutting0840/1
+
+T O(price.length * price.length), S O(price.length * price.length)
+
+// Code is same as unbounded knapsck (unlimited supply) , need to be careful about variables
+//here length of rod = length of array
+//
+
+class Solution {
+    public int cutRod(int[] price) {
+        // code here
+        int length = price.length;
+        
+        int dp[][] = new int[length+1][length+1];
+        
+        for(int[] arr : dp){
+            Arrays.fill(arr, -1);
+        }
+
+        int start = price.length;
+        return cutRodUtil(price, length, start, dp);
+    }
+    
+    public int cutRodUtil(int[] price, int length, int i, int dp[][]) {
+        // code here
+        
+        if(length == 0 || i == 0) return 0;
+        
+
+        if(dp[i][length] != -1) return dp[i][length];
+        
+        if(length>=i){
+            //we can sell for this price
+            int price1 = price[i-1] + cutRodUtil(price, length-i, i, dp);
+            
+            int price2 = cutRodUtil(price, length, i-1, dp);
+            
+            dp[i][length] = Math.max(price1, price2);
+            return dp[i][length];
+        }
+        else{
+            dp[i][length] = cutRodUtil(price, length, i-1, dp);
+            return dp[i][length];
+        }
+    }
+}
+
+====================
+Rod Cutting
+Difficulty: Medium
+
+Given a rod of length n inches and an array of prices, price. price[i] denotes the value of a piece of length i. Determine the maximum value obtainable by cutting up the rod and selling the pieces.
+
+Example:
+
+Input: price[] = [1, 5, 8, 9, 10, 17, 17, 20]
+Output: 22
+Explanation: The maximum obtainable value is 22 by cutting in two pieces of lengths 2 and 6, i.e., 5+17=22.
+Input: price[] = [3, 5, 8, 9, 10, 17, 17, 20]
+Output: 24
+Explanation: The maximum obtainable value is 24 by cutting the rod into 8 pieces of length 1, i.e, 8*price[1]= 8*3 = 24.
+Input: price[] = [1, 10, 3, 1, 3, 1, 5, 9]
+Output: 40
+Constraints:
+1 ≤ price.size() ≤ 103
+1 ≤ price[i] ≤ 106
+
