@@ -1,0 +1,94 @@
+https://www.geeksforgeeks.org/problems/another-coin-change-problem--170647/0
+
+T O(n * k * target), S O(n * k * target)
+
+//=> As perquestion we need to return true when k and target becomes 0 at a time.
+//=>here we need have Dp of 3D array,
+//sample case for which it will fail if we use 2D dp array , N=3, K=3, target=9, [1, 7, 6]
+
+class Solution {
+    public static boolean makeChanges(int N, int K, int target, int[] coins) {
+        // code here
+        
+        int dp[][][] = new int[N+1][target+1][K+1]; //lets assume 1=true , 0=false
+        for(int[][] aa : dp){
+            for(int[] a : aa){
+                Arrays.fill(a, -1);
+            }
+        }
+        
+        
+        return makeChangesUtil(N, K, target, coins, dp);
+    }
+    
+    public static boolean makeChangesUtil(int N, int K, int target, int[] coins, int dp[][][]) {
+        // code here
+        if(K==0 && target==0) return true;
+        
+        if(K==0 || target==0 || N==0) return false;
+        
+        if(dp[N][target][K] != -1){
+            return dp[N][target][K] == 1;
+        }
+        
+        if(target>=coins[N-1]){
+            boolean include = makeChangesUtil(N, K-1, target-coins[N-1], coins, dp);
+            
+            boolean exclude = makeChangesUtil(N-1, K, target, coins, dp);
+            
+            boolean ans = (include || exclude);
+            
+            dp[N][target][K] = (include || exclude) ? 1 : 0;
+            
+            return ans;
+        }
+        else {
+            boolean exclude = makeChangesUtil(N-1, K, target, coins, dp);
+            
+            dp[N][target][K] = (exclude) ? 1 : 0;
+            
+            return exclude;
+        }
+        
+    }
+}
+======
+Another Coin Change Problem
+Difficulty: Medium
+
+Given three integers n, k, target, and an array of coins of size n. Find if it is possible to make a change of target cents by using an infinite supply of each coin but the total number of coins used must be exactly equal to k.
+
+Example 1:
+
+Input:
+n = 5, k = 3, target = 11
+coins = {1, 10, 5, 8, 6}
+
+Output: 
+1
+
+Explanation: 
+2 coins of 5 and 1 coins of 1 can be used 
+to make change of 11 i.e. 11 => 5+5+1.
+Example 2:
+
+Input:
+n = 3, k = 5, target = 25
+coins = {7, 2, 4}
+
+Output:
+1
+
+Explanation:
+3 coins 7, 2 coins of 2 can be used to
+make change of 25 i.e. 25 => 7+7+7+2+2.
+Your Task:
+This is a function problem. You only need to complete the function makeChanges() that 3 integers n, k, target, and an array coins as parameters and return True or False.
+
+Expected Time Complexity: O(n*k*target)
+Expected Space Complexity: O(k*target)
+
+Constraints:
+1 <= n, k, coins[i] <= 100
+1 <= target <= 1000
+
