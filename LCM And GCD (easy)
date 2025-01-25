@@ -1,0 +1,10 @@
+https://www.geeksforgeeks.org/problems/lcm-and-gcd4516/1
+
+Euclid'd Algorithm
+LCM(a,b) = (a*b)/gcd(a,b)
+
+ GCD(a,b){
+  if(b==0) return a;
+
+  return GCD(b, a%b);
+ }
