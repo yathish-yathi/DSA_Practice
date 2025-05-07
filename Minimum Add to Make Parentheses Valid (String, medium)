@@ -1,0 +1,57 @@
+https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
+
+//Here we increase openMinusClose by 1 when we see '(' and reduce by one when we see ')'
+//openMinusClose is in positive means we have more '(' and we need close bracket after i to nuetralise which could be present after i
+//openMinusClose is in negetive means we have more ')' and we needed open bracket beofore i to nuetralise which is not present present so whenever 
+//we hit -ve value count number hits and make openMinusClose = 0
+//openMinusClose = number of ')' need to nuetralise to be added after i
+//count = number of '(' needed before i
+//return sum of ( and ) required 
+
+class Solution {
+    public int minAddToMakeValid(String s) {
+        int openMinusClose=0;
+        int count=0;
+        for(int i=0; i<s.length(); i++){
+            if(s.charAt(i) == '(') openMinusClose++;
+            else openMinusClose--;
+
+            if(openMinusClose<0){
+                count++;
+                openMinusClose=0;
+            }
+        }
+
+        return openMinusClose + count;
+    }
+}
+
+=====
+Minimum Add to Make Parentheses Valid
+
+A parentheses string is valid if and only if:
+
+It is the empty string,
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+You are given a parentheses string s. In one move, you can insert a parenthesis at any position of the string.
+
+For example, if s = "()))", you can insert an opening parenthesis to be "(()))" or a closing parenthesis to be "())))".
+Return the minimum number of moves required to make s valid.
+
+ 
+
+Example 1:
+
+Input: s = "())"
+Output: 1
+Example 2:
+
+Input: s = "((("
+Output: 3
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+s[i] is either '(' or ')'.
